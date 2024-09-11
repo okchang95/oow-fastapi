@@ -17,11 +17,14 @@ numpy==1.26.4
 │   ├── db
 │   │   └── firebase.py # firebase initializers, firebase 토큰 인증
 │   └── main.py # entry point
-├── firebase_credentials.json # firebase credentials key
+│
+├── test
+│   ├── dummyusertoken.py # 더미 회원 생성, firebase id token 발급
+│   └── loadusertoken.py # firestore에 생성된 회원 조회, firebase token 조회
 ├── images 
 │   └── test.jpg # test image
+│
+├── firebase_credentials.json # firebase credentials key
 ├── requirements.txt
-└── test
-    ├── dummyusertoken.py # 더미 회원 생성, firebase id token 발급
-    └── loadusertoken.py # firestore에 생성된 회원 조회, firebase token 조회
+└── .env # environment
 ```
