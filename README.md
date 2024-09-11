@@ -26,5 +26,7 @@ numpy==1.26.4
 │
 ├── firebase_credentials.json # firebase credentials key
 ├── requirements.txt
-└── .env # environment
+├── .env # environment
+├── .gitignore
+└── README.md
 ```
