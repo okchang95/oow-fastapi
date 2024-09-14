@@ -71,11 +71,11 @@ numpy==1.26.4
 
 ```text
 Searching for blobs with prefix: 옥창우
-Blob name: 옥창우_20240911.jpg
+Blob name: 김김김_20240911.jpg
 Extracted date: 2024-09-11
-Blob name: 옥창우_20240912.jpg
+Blob name: 김김김_20240912.jpg
 Extracted date: 2024-09-12
-Blob name: 옥창우_20240913.jpg
+Blob name: 김김김_20240913.jpg
 Extracted date: 2024-09-13
 Total uploads: 3
 Uploads this week: 3

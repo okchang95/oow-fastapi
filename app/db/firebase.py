@@ -13,11 +13,3 @@ def initialize_firebase():
 
 
 bucket = initialize_firebase()
-
-
-# def verify_firebase_token(token: str):
-#     try:
-#         decoded_token = auth.verify_id_token(token)
-#         return decoded_token
-#     except Exception as e:
-#         raise ValueError("Invalid Firebase token")
