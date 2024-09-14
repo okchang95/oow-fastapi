@@ -7,13 +7,11 @@ numpy==1.26.4
 ├── app
 │   ├── api # routers
 │   │   ├── auth.py # firebase id token 생성 관련 라우터(test)
-│   │   ├── dummyuser.py # 더미유저정보 생성, 조회 라우터
-│   │   ├── process_img.py # 메인기능: 오운완 인증, 이미지 업로드, CRUD 라우터
+│   │   ├── upload_image.py # 메인기능: 오운완 인증, 이미지 업로드, 인증일 로직
 │   │   └── timecheck # ocr 관련 모듈(process_img.py에서 사용, 정리 필요)
 │   │       └── ocr.py # inference module
 │   ├── core # 공통으로 사용 
-│   │   ├── config.py # 환경변수 pydantic
-│   │   └── jwt.py # jwt 토큰 생성(test)
+│   │   └── config.py # 환경변수 pydantic
 │   ├── db
 │   │   └── firebase.py # firebase initializers, firebase 토큰 인증
 │   └── main.py # entry point
@@ -30,3 +28,67 @@ numpy==1.26.4
 ├── .gitignore
 └── README.md
 ```
+
+## post("/upload_image")
+
+### Request
+
+![alt text](image.png)
+
+### Response
+
+```bash
+{
+  "message": "파일 업로드 완료",
+  "file_url": "https://storage.googleapis.com/oow-challenge.appspot.com/[ENCODED_NAME]_[DATE].jpg",
+  "ocr_result": {
+    "verified": true,
+    "date": "2024년 7월 29일"
+  }
+}
+```
+
+## post("/upload_image")
+
+### Request
+
+![alt text](image.png)
+
+### Response
+
+```bash
+{
+  "message": "파일 업로드 완료",
+  "file_url": "https://storage.googleapis.com/oow-challenge.appspot.com/%E1%84%80%E1%85%B5%E1%86%B7%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8B%E1%85%AF%E1%86%AB_20240913.jpg",
+  "ocr_result": {
+    "verified": true,
+    "date": "2024년 7월 29일"
+  }
+}
+```
+
+## get("/mypage/{user_name}")
+
+```text
+Searching for blobs with prefix: 옥창우
+Blob name: 옥창우_20240911.jpg
+Extracted date: 2024-09-11
+Blob name: 옥창우_20240912.jpg
+Extracted date: 2024-09-12
+Blob name: 옥창우_20240913.jpg
+Extracted date: 2024-09-13
+Total uploads: 3
+Uploads this week: 3
+Last upload date: 2024-09-13
+
+```
+
+### Response
+
+{
+  "user_name": "옥창우",
+  "total_uploads": 3,
+  "uploads_this_week": 3,
+  "fine_amount": 0,
+  "last_upload_date": "2024-09-13"
+}
