@@ -48,24 +48,6 @@ numpy==1.26.4
 }
 ```
 
-## post("/upload_image")
-
-### Request
-
-![alt text](image.png)
-
-### Response
-
-```bash
-{
-  "message": "파일 업로드 완료",
-  "file_url": "https://storage.googleapis.com/oow-challenge.appspot.com/%E1%84%80%E1%85%B5%E1%86%B7%E1%84%89%E1%85%A5%E1%86%BC%E1%84%8B%E1%85%AF%E1%86%AB_20240913.jpg",
-  "ocr_result": {
-    "verified": true,
-    "date": "2024년 7월 29일"
-  }
-}
-```
 
 ## get("/mypage/{user_name}")
 
