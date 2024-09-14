@@ -67,6 +67,7 @@ Last upload date: 2024-09-13
 
 ### Response
 
+```bash
 {
   "user_name": "옥창우",
   "total_uploads": 3,
@@ -74,3 +75,4 @@ Last upload date: 2024-09-13
   "fine_amount": 0,
   "last_upload_date": "2024-09-13"
 }
+```
