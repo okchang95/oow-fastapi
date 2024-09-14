@@ -69,7 +69,7 @@ Last upload date: 2024-09-13
 
 ```bash
 {
-  "user_name": "옥창우",
+  "user_name": "김김김",
   "total_uploads": 3,
   "uploads_this_week": 3,
   "fine_amount": 0,
