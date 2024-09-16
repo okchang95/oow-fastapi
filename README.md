@@ -4,22 +4,72 @@ python==3.11.0
 numpy==1.26.4
 ```
 
-### tree(09/12)
+## 환경설정
+
+### 필수 파일
+프로젝트 루트 디렉토리에 다음 파일들이 필요합니다:
+- `.env`
+- `serviceAccountKey.json` (Firebase 서비스 계정 키)
+### `.env` 파일 설정
+```
+FRONTEND_URL=http://{ip or localhost}:3000
+PROJECT_NAME=your-project-name
+FIREBASE_CONFIG_PATH=./your-firebase-key-filename.json
+FIREBASE_STORAGE_BUCKET=your-bucket-url
+```
+
+## 설치 및 실행
+
+### 도커 이미지 빌드
+```bash
+docker build -t [your-image-name] .
+```
+```bash
+# builded image 
+REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
+your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
+```
+
+### 도커 컨테이너 실행
+```bash
+# Linux/macOS
+docker run -p 8000:8000 \
+  -n [your-container-name]
+  --env-file .env \
+  -v $(pwd)/[your-firebase-key-filename.json]:/app/[your-firebase-key-filename.json]:ro \
+  [your-image-name]
+
+# Windows
+docker run -p 8000:8000 \
+  -n [your-container-name]
+  --env-file .env \
+  -v ${PWD}/[your-firebase-key-filename.json]:/app/[your-firebase-key-filename.json]:ro \
+  [your-image-name]
+```
+<!--
+docker run -p 8000:8000 \
+  --name oow-test-container \
+  --env-file .env \
+  -v $(pwd)/firebase_credentials.json:/app/firebase_credentials.json:ro \
+  oow-test
+-->
+
+## 프로젝트 구조
 ```bash
 .
-├── app
-│   ├── api # routers
-│   │   ├── calendar # 전체 인증 출력
+├── app/
+│   ├── api/ # routers
+│   │   ├── calendar/ # 전체 인증 출력
 │   │   │   └── calendar.py # Read
-│   │   ├── mypage
+│   │   ├── mypage/
 │   │   │   ├── mypage.py # ocr인증 후 upload, 인증 수, 벌금 출력
-│   │   │   └── timecheck
+│   │   │   └── timecheck/
 │   │   │       └── ocr.py
-│   │   └── notice
+│   │   └── notice/
 │   │       └── notice.py # 공지사항 CRUD, admin만 입력, 수정, 삭제 가능
-│   ├── core
+│   ├── core/
 │   │   └── config.py # 환경변수 pydantic
-│   ├── db
+│   ├── db/
 │   │   └── firebase.py # firebase initializers
 │   └── main.py
 │
@@ -31,54 +81,31 @@ numpy==1.26.4
 ├── requirements.txt
 └── README.md
 ```
+## 주요 기능
 
-### Test
-- root위치에 `.env`, `serviceAccountKey.json`(firebase serviceAccountKey) 있어야함
-  ```
-  # .env
-  FRONTEND_URL="http://{ip}:3000"
-  ```
-#### 이미지 빌드
-```bash
-docker build -t [your-image-name] .
-```
-```
-# builded image 
-REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
-your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
-```
+### MyPage
+- 오운완 인증 이미지 업로드
+- 사용자별 인증 및 벌금 정보 조회
 
-#### 컨테이너 실행
-```bash
-# run image (윈도우면 $(pwd) -> ${PWD} 로 변경)
-docker run -p 8000:8000 \
-  -n [your-container-name]
-  --env-file .env \
-  -v $(pwd)/[serviceAccountKey].json:/app/[serviceAccountKey].json:ro \
-  [your-image-name]
-```
-<!--
-docker run -p 8000:8000 \
-  --name oow-test-container \
-  --env-file .env \
-  -v $(pwd)/firebase_credentials.json:/app/firebase_credentials.json:ro \
-  oow-test
--->
+### Calendar
+- 날짜별 인증 현황 조회
+
+### Notice
+- 공지사항 CRUD (관리자 전용)
+
+## API 문서
+서버 실행 후 `http://localhost:8000/docs`에서 Swagger UI를 통해 API 문서를 확인할 수 있습니다.
+
+## 개발 현황
+- [x] 불필요한 로직 제거
+- [x] 캘린더 조회 기능 추가
+- [x] 공지사항 CRUD 기능 추가
+- [x] Storage에서 인증 이미지와 공지사항 경로 분리
+
+<img width="302" alt="image" src="https://github.com/user-attachments/assets/256ff235-604c-4203-8aea-31cf1f45202a">
 
 
-## 진행사항
-- 필요없는 로직 제거
-    - 더미데이터 정보로 처리 가능하게 수정
-- 기능 추가
-    - 캘린더 조회
-    - 공지사항 CRUD (임시)
-- storaeg에서 인증이미지, 공지사항 경로 분리
-
-  <img width="302" alt="image" src="https://github.com/user-attachments/assets/256ff235-604c-4203-8aea-31cf1f45202a">
-
-# 주요 기능
-
-### swagger
+## swagger
 
 <img width="600" alt="image" src="images/swagger.png">
 
