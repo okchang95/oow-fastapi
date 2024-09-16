@@ -28,7 +28,7 @@ async def upload_image(imagefile: UploadFile = File(...)):
 
         if result_ocr["verified"]:
             # 이미지 파일을 Firebase Storage에 업로드
-            blob = bucket.blob(imagefile.filename)
+            blob = bucket.blob(f"images/{imagefile.filename}")
             blob.upload_from_string(file_bytes, content_type=imagefile.content_type)
 
             # 업로드 완료 후 파일 URL 반환
@@ -52,11 +52,14 @@ async def upload_image(imagefile: UploadFile = File(...)):
         )
 
 
-@router.get("/mypage/{user_name}")
+@router.get("/user/{user_name}")
 async def get_user_status(user_name: str):
+    """
+    "누적인증일수", "이번주인증일수", "벌금금액" 반환
+    """
     try:
         # bucket 불러오기
-        blobs = bucket.list_blobs()
+        blobs = bucket.list_blobs(prefix="images/")
 
         # debugs
         print(f"Searching for blobs with prefix: {user_name}_")
@@ -65,7 +68,9 @@ async def get_user_status(user_name: str):
         today = datetime.now().date()
         start_of_week = today - timedelta(days=today.weekday())
         end_of_week = start_of_week + timedelta(days=6)
+        print(f"이번 주 시작일: {start_of_week}, 종료일: {end_of_week}")
 
+        # 전체업로드, 이번주 업로드 계산
         total_uploads = 0
         uploads_this_week = 0
         last_upload_date = None
@@ -90,21 +95,24 @@ async def get_user_status(user_name: str):
 
         print(f"Total uploads: {total_uploads}")
         print(f"Uploads this week: {uploads_this_week}")
-        print(f"Last upload date: {last_upload_date}")
+        # print(f"Last upload date: {last_upload_date}")
 
+        # 벌금계산
         weeks_passed = (today - start_of_week).days // 7 + 1
         expected_uploads = weeks_passed * 3
+
         missed_days = max(0, expected_uploads - total_uploads)
         fine_amount = missed_days * 5000  # 5000원 per missed day
 
         return {
-            "user_name": user_name,
-            "total_uploads": total_uploads,
-            "uploads_this_week": uploads_this_week,
-            "fine_amount": fine_amount,
-            "last_upload_date": (
-                last_upload_date.strftime("%Y-%m-%d") if last_upload_date else None
-            ),
+            "user_name": user_name,  # 이름
+            "total_uploads": total_uploads,  # 누적 인증일 수
+            "uploads_this_week": uploads_this_week,  # 이번주 인증일 수
+            "fine_amount": fine_amount,  # 벌금 금액
+            # TODO: 이부분은 나중에 "님 운동 안한지 ~~일 째잖아요 운동하러가세요!" 할수있지않을까
+            # "last_upload_date": (
+            #     last_upload_date.strftime("%Y-%m-%d") if last_upload_date else None
+            # ),
         }
 
     except Exception as e:

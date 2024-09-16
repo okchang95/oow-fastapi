@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import upload_image
+from app.api.mypage import mypage
+from app.api.calendar import calendar
+from app.api.notice import notice
+
+
 from app.core.config import settings
 
 import os
@@ -29,7 +33,9 @@ app.add_middleware(
 )
 
 # 라우터 등록
-app.include_router(upload_image.router)
+app.include_router(mypage.router, prefix="/mypage", tags=["MyPage"])
+app.include_router(calendar.router, prefix="/calendar", tags=["Calendar"])
+app.include_router(notice.router, prefix="/notice", tags=["Notice"])
 
 
 @app.get("/")
