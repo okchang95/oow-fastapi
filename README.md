@@ -66,3 +66,5 @@ docker run -p 8000:8000 \
 REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
 test-img                 latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```
+
+![alt text](images/swagger.png)
