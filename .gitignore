@@ -1,6 +1,5 @@
 firebase_credentials.json
 
-images/*
 app/api/auth.py
 app/api/dummyuser.py
 legacy/
