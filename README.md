@@ -25,7 +25,7 @@ FIREBASE_STORAGE_BUCKET=your-bucket-url
 docker build -t [your-image-name] .
 ```
 ```bash
-# builded image 
+# built image 
 REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
 your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```
