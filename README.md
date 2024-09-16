@@ -1,5 +1,8 @@
+# oow fastapi server
+```
 python==3.11.0
 numpy==1.26.4
+```
 
 ### tree(09/12)
 ```bash
@@ -19,7 +22,8 @@ numpy==1.26.4
 │   ├── db
 │   │   └── firebase.py # firebase initializers
 │   └── main.py
-├── firebase_credentials.json # firebase credentials key
+│
+├── serviceAccountKey.json # firebase credentials key
 ├── .env # environment: frontend url
 ├── .gitignore
 ├── .docerignore
@@ -28,15 +32,14 @@ numpy==1.26.4
 └── README.md
 ```
 
-### build
+### Test
 - root위치에 `.env`, `serviceAccountKey.json`(firebase serviceAccountKey) 있어야함
-```
-# .env
-FRONTEND_URL="http://{ip}:3000"
-```
-
+  ```
+  # .env
+  FRONTEND_URL="http://{ip}:3000"
+  ```
+#### 이미지 빌드
 ```bash
-# build image
 docker build -t [your-image-name] .
 ```
 ```
@@ -45,6 +48,7 @@ REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
 your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```
 
+#### 컨테이너 실행
 ```bash
 # run image (윈도우면 $(pwd) -> ${PWD} 로 변경)
 docker run -p 8000:8000 \
@@ -61,10 +65,6 @@ docker run -p 8000:8000 \
   oow-test
 -->
 
-```
-# builded image 
-REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
-test-img                 latest    d61c21d4dd75   2 minutes ago   6.2GB
-```
+### swagger
 
 ![alt text](images/swagger.png)
