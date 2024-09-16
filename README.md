@@ -6,73 +6,63 @@ numpy==1.26.4
 .
 ├── app
 │   ├── api # routers
-│   │   ├── auth.py # firebase id token 생성 관련 라우터(test)
-│   │   ├── upload_image.py # 메인기능: 오운완 인증, 이미지 업로드, 인증일 로직
-│   │   └── timecheck # ocr 관련 모듈(process_img.py에서 사용, 정리 필요)
-│   │       └── ocr.py # inference module
-│   ├── core # 공통으로 사용 
+│   │   ├── calendar # 전체 인증 출력
+│   │   │   └── calendar.py # Read
+│   │   ├── mypage
+│   │   │   ├── mypage.py # ocr인증 후 upload, 인증 수, 벌금 출력
+│   │   │   └── timecheck
+│   │   │       └── ocr.py
+│   │   └── notice
+│   │       └── notice.py # 공지사항 CRUD, admin만 입력, 수정, 삭제 가능
+│   ├── core
 │   │   └── config.py # 환경변수 pydantic
 │   ├── db
-│   │   └── firebase.py # firebase initializers, firebase 토큰 인증
-│   └── main.py # entry point
-│
-├── test
-│   ├── dummyusertoken.py # 더미 회원 생성, firebase id token 발급
-│   └── loadusertoken.py # firestore에 생성된 회원 조회, firebase token 조회
-├── images 
-│   └── test.jpg # test image
-│
+│   │   └── firebase.py # firebase initializers
+│   └── main.py
 ├── firebase_credentials.json # firebase credentials key
-├── requirements.txt
-├── .env # environment
+├── .env # environment: frontend url
 ├── .gitignore
+├── .docerignore
+├── Dockerfile
+├── requirements.txt
 └── README.md
 ```
 
-## post("/upload_image")
-
-### Request
-
-![alt text](image.png)
-
-### Response
-
-```bash
-{
-  "message": "파일 업로드 완료",
-  "file_url": "https://storage.googleapis.com/oow-challenge.appspot.com/[ENCODED_NAME]_[DATE].jpg",
-  "ocr_result": {
-    "verified": true,
-    "date": "2024년 7월 29일"
-  }
-}
+### build
+- root위치에 `.env`, `serviceAccountKey.json`(firebase serviceAccountKey) 있어야함
+```
+# .env
+FRONTEND_URL="http://{ip}:3000"
 ```
 
-
-## get("/mypage/{user_name}")
-
-```text
-Searching for blobs with prefix: 옥창우
-Blob name: 김김김_20240911.jpg
-Extracted date: 2024-09-11
-Blob name: 김김김_20240912.jpg
-Extracted date: 2024-09-12
-Blob name: 김김김_20240913.jpg
-Extracted date: 2024-09-13
-Total uploads: 3
-Uploads this week: 3
-Last upload date: 2024-09-13
-
+```bash
+# build image
+docker build -t [your-image-name] .
+```
+```
+# builded image 
+REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
+your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```
 
-### Response
-
 ```bash
-{
-  "user_name": "김김김",
-  "total_uploads": 3,
-  "uploads_this_week": 3,
-  "fine_amount": 0,
-  "last_upload_date": "2024-09-13"
-}
+# run image (윈도우면 $(pwd) -> ${PWD} 로 변경)
+docker run -p 8000:8000 \
+  -n [your-container-name]
+  --env-file .env \
+  -v $(pwd)/[serviceAccountKey].json:/app/[serviceAccountKey].json:ro \
+  [your-image-name]
+```
+<!--
+docker run -p 8000:8000 \
+  --name oow-test-container \
+  --env-file .env \
+  -v $(pwd)/firebase_credentials.json:/app/firebase_credentials.json:ro \
+  oow-test
+-->
+
+```
+# builded image 
+REPOSITORY               TAG       IMAGE ID       CREATED         SIZE
+test-img                 latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```
