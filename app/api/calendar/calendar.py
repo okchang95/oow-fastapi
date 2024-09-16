@@ -34,7 +34,7 @@ async def get_calendar():
 
             print(blob.name)
             date_str = blob.name.split(".")[0].split("_")[-1]
-            name_str = blob.name.split("_")[0]
+            name_str = blob.name.split("_")[0].split("/")[-1]
             print(date_str)
 
             try:
