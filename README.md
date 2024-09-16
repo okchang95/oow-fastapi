@@ -9,7 +9,7 @@ numpy==1.26.4
 ### 필수 파일
 프로젝트 루트 디렉토리에 다음 파일들이 필요합니다:
 - `.env`
-- `serviceAccountKey.json` (Firebase 서비스 계정 키)
+- `your-firebase-key-filename.json` (Firebase 서비스 계정 키)
 ### `.env` 파일 설정
 ```
 FRONTEND_URL=http://{ip or localhost}:3000
