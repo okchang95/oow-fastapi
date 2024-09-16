@@ -1,6 +1,9 @@
 firebase_credentials.json
+
+app/api/auth.py
+app/api/dummyuser.py
+legacy/
 test/
-images/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,python,firebase
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudiocode,python,firebase

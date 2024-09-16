@@ -1,25 +1,41 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# from app.api.routes import auth, workouts, users, notifications, ocr
-from app.api import process_img, dummyuser
+from app.api.mypage import mypage
+from app.api.calendar import calendar
+from app.api.notice import notice
+
+
 from app.core.config import settings
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+origins = [
+    os.getenv("FRONTEND_URL"),
+    "http://localhost:3000",
+    "http://0.0.0.0:3000",
+    "https://0.0.0.0:3000",
+]
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
 # CORS 미들웨어 추가
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React 앱의 URL
+    allow_origins=origins,  # React 앱의 URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 # 라우터 등록
-app.include_router(process_img.router)
-app.include_router(dummyuser.router)
+app.include_router(mypage.router, prefix="/mypage", tags=["MyPage"])
+app.include_router(calendar.router, prefix="/calendar", tags=["Calendar"])
+app.include_router(notice.router, prefix="/notice", tags=["Notice"])
 
 
 @app.get("/")

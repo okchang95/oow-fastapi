@@ -13,17 +13,5 @@ class Settings(BaseSettings):
         "oow-challenge.appspot.com", description="Firebase storage bucket url"
     )
 
-    # jwt
-    SECRET_KEY: str = Field(..., env="SECRET_KEY")
-    ALGORITHM: str = "HS256"
-
-    # API_V1_STR: str = "/api/v1"
-    # ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
-    # FIREBASE_STORAGE_BUCKET: str = Field(..., env="FIREBASE_STORAGE_BUCKET")
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-
 
 settings = Settings()
