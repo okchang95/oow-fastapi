@@ -34,14 +34,14 @@ your-image-name          latest    d61c21d4dd75   2 minutes ago   6.2GB
 ```bash
 # Linux/macOS
 docker run -p 8000:8000 \
-  -n [your-container-name]
+  --name [your-container-name]
   --env-file .env \
   -v $(pwd)/[your-firebase-key-filename.json]:/app/[your-firebase-key-filename.json]:ro \
   [your-image-name]
 
 # Windows
 docker run -p 8000:8000 \
-  -n [your-container-name]
+  --name [your-container-name]
   --env-file .env \
   -v ${PWD}/[your-firebase-key-filename.json]:/app/[your-firebase-key-filename.json]:ro \
   [your-image-name]
