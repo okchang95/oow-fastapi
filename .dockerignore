@@ -41,7 +41,7 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-firebase_credentials.json
+serviceAccountKey.json
 *.md
 LICENSE
 tests/

@@ -3,15 +3,20 @@ from pydantic import Field
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "OOW Challenge Project"
+    PROJECT_NAME: str = Field(env="PROJECT_NAME")
+    FRONTEND_URL: str = Field(..., env="FRONTEND_URL")
 
     # firebase
     FIREBASE_CONFIG_PATH: str = Field(
-        "./firebase_credentials.json", description="Firebase config path"
+        ..., env="FIREBASE_CONFIG_PATH", description="Firebase config path"
     )
     FIREBASE_STORAGE_BUCKET: str = Field(
-        "oow-challenge.appspot.com", description="Firebase storage bucket url"
+        ..., env="FIREBASE_STORAGE_BUCKET", description="Firebase storage bucket url"
     )
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
 
 settings = Settings()

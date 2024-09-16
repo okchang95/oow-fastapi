@@ -1,4 +1,4 @@
-firebase_credentials.json
+serviceAccountKey.json
 
 app/api/auth.py
 app/api/dummyuser.py
