@@ -15,6 +15,8 @@ load_dotenv()
 
 
 origins = [
+    os.getenv("CLOUD_RUN_URL"),
+    "https://oow-challenge-backend-1825177038842.asia-northeast3.run.app",  # 실제 Cloud Run URL
     os.getenv("FRONTEND_URL"),
     "http://localhost:3000",
     "http://0.0.0.0:3000",
