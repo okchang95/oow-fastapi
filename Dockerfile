@@ -17,8 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 프로젝트 파일을 복사합니다
 COPY . .
 
-# 포트 8000을 노출합니다
-EXPOSE 8000
+# 포트 8080 노출합니다
+EXPOSE 8080
 
 # 애플리케이션을 실행합니다
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
