@@ -33,17 +33,17 @@ app.add_middleware(
 )
 
 # 라우터 등록
-app.include_router(mypage.router, prefix="/mypage", tags=["MyPage"])
-app.include_router(calendar.router, prefix="/calendar", tags=["Calendar"])
-app.include_router(notice.router, prefix="/notice", tags=["Notice"])
+app.include_router(mypage.router, prefix="/api/mypage", tags=["MyPage"])
+app.include_router(calendar.router, prefix="/api/calendar", tags=["Calendar"])
+app.include_router(notice.router, prefix="/api/notice", tags=["Notice"])
 
 
-@app.get("/")
-async def root():
-    return {"message": "hihi"}
+# @app.get("/")
+# async def root():
+#     return {"message": "hihi"}
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, port=8000)  # host="0.0.0.0"
+    uvicorn.run(app, host="0.0.0.0", port=8080)
