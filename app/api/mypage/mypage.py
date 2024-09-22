@@ -85,6 +85,9 @@ router = APIRouter()
 
 @router.get("/user/{user_name}/total_uploads")
 async def get_total_uploads(user_name: str):
+    """
+    "누적인증일수" 반환
+    """
     try:
         blobs = bucket.list_blobs(prefix="images/")
         total_uploads = sum(
@@ -99,6 +102,9 @@ async def get_total_uploads(user_name: str):
 
 @router.get("/user/{user_name}/uploads_this_week")
 async def get_uploads_this_week(user_name: str):
+    """
+    "이번 주 인증일 수" 반환
+    """
     try:
         blobs = bucket.list_blobs(prefix="images/")
         today = datetime.now().date()
@@ -123,16 +129,24 @@ async def get_uploads_this_week(user_name: str):
 
 @router.get("/user/{user_name}/fine_amount")
 async def get_fine_amount(user_name: str):
+    """
+    "벌금 금액" 반환
+    """
     try:
         blobs = bucket.list_blobs(prefix="images/")
+        # 총 업로드 수
         total_uploads = sum(
             1 for blob in blobs if blob.name.startswith(f"images/{user_name}_")
         )
+        # 현재 날짜를 기준으로 이번 주의 시작일을 계산
         today = datetime.now().date()
         start_of_week = today - timedelta(days=today.weekday())
+        # 이번 주의 종료일을 계산
         weeks_passed = (today - start_of_week).days // 7 + 1
+        # 누적 업로드 수와 예상 업로드 수의 차이를 계산
         expected_uploads = weeks_passed * 3
         missed_days = max(0, expected_uploads - total_uploads)
+        # 벌금 금액 계산
         fine_amount = missed_days * 5000
         return {"user_name": user_name, "fine_amount": fine_amount}
     except Exception as e:
@@ -143,6 +157,9 @@ async def get_fine_amount(user_name: str):
 
 @router.get("/user/{user_name}/images")
 async def get_user_images(user_name: str):
+    """
+    "사용자가 업로드한 이미지 목록" 반환
+    """
     try:
         blobs = bucket.list_blobs(prefix="images/")
         user_images = [
