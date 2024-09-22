@@ -21,8 +21,10 @@ async def get_total_uploads(user_name: str):
         for i, blob in enumerate(blobs):
             print(f"Checking blob: {i+1}: {blob.name}")
             if blob.name.startswith(f"images/{user_name}_"):
-                print(f"Adding image: {blob.name.split('/')[-1]}")
-                user_images.append(blob.name.split("/")[-1])
+                image_name = blob.name.split("/")[-1]
+                print(f"Adding image: {image_name}")
+                user_images.append(image_name)
+                print(user_images)
 
         total_uploads = len(user_images)
 
