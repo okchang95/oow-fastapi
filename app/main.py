@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.mypage import upload_image
 from app.api.mypage import mypage
+
 from app.api.calendar import calendar
 from app.api.notice import notice
 
@@ -36,6 +38,7 @@ app.add_middleware(
 
 # 라우터 등록
 app.include_router(mypage.router, prefix="/api/mypage", tags=["MyPage"])
+app.include_router(upload_image.router, prefix="/api/mypage", tags=["MyPage"])
 app.include_router(calendar.router, prefix="/api/calendar", tags=["Calendar"])
 app.include_router(notice.router, prefix="/api/notice", tags=["Notice"])
 
