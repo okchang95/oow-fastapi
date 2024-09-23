@@ -1,30 +1,49 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, HTTPException
 from datetime import datetime, timedelta
+import unicodedata
 
-from .timecheck.ocr import perform_ocr
 from app.db.firebase import bucket  # initialization
-
+import time
 
 router = APIRouter()
 
 
+def normalize_string(s):
+    return unicodedata.normalize("NFC", s).encode("utf-8")
+
+
 @router.get("/user/{user_name}/total_uploads")
 async def get_total_uploads(user_name: str):
+    print(f"Request received at: {time.time()}")
     """
     "누적인증일수"와 "이미지 이름 리스트" 반환
     """
     try:
         blobs = bucket.list_blobs(prefix="images/")
-        user_images = []
-        total_uploads = 0
 
-        for i, blob in enumerate(blobs):
-            print(f"Checking blob: {i+1}: {blob.name}")
-            if blob.name.startswith(f"images/{user_name}_"):
-                image_name = blob.name.split("/")[-1]
-                print(f"Adding image: {image_name}")
-                user_images.append(image_name)
-                print(user_images)
+        print(f"User name received: '{user_name}'")
+        print(f"User name encoded: {user_name.encode()}")
+
+        normalized_user_name = normalize_string(user_name)
+        user_images = []
+
+        for blob in blobs:
+            filename = blob.name.split("/")[-1]
+            normalized_filename = normalize_string(filename)
+
+            print(f"Checking blob: '{filename}'")
+            print(f"Filename encoded: {filename.encode()}")
+
+            comparison_string = b"images/" + normalized_user_name + b"_"
+            print(f"Comparison string: '{comparison_string}'")
+
+            if normalize_string(blob.name).startswith(comparison_string):
+                print(f"Adding image: {filename}")
+                user_images.append(filename)
+            else:
+                print(f"Not matching: {filename}")
+
+        print(user_images)
 
         total_uploads = len(user_images)
 
@@ -50,10 +69,13 @@ async def get_uploads_this_week(user_name: str):
         today = datetime.now().date()
         start_of_week = today - timedelta(days=today.weekday())
         end_of_week = start_of_week + timedelta(days=6)
+        normalized_user_name = normalize_string(user_name)
         uploads_this_week = sum(
             1
             for blob in blobs
-            if blob.name.startswith(f"images/{user_name}_")
+            if normalize_string(blob.name).startswith(
+                b"images/" + normalized_user_name + b"_"
+            )
             and start_of_week
             <= datetime.strptime(
                 blob.name.split("_")[-1].split(".")[0], "%Y%m%d"
@@ -74,9 +96,14 @@ async def get_fine_amount(user_name: str):
     """
     try:
         blobs = bucket.list_blobs(prefix="images/")
+        normalized_user_name = normalize_string(user_name)
         # 총 업로드 수
         total_uploads = sum(
-            1 for blob in blobs if blob.name.startswith(f"images/{user_name}_")
+            1
+            for blob in blobs
+            if normalize_string(blob.name).startswith(
+                b"images/" + normalized_user_name + b"_"
+            )
         )
         # 현재 날짜를 기준으로 이번 주의 시작일을 계산
         today = datetime.now().date()
@@ -102,10 +129,13 @@ async def get_user_images(user_name: str):
     """
     try:
         blobs = bucket.list_blobs(prefix="images/")
+        normalized_user_name = normalize_string(user_name)
         user_images = [
             blob.public_url
             for blob in blobs
-            if blob.name.startswith(f"images/{user_name}_")
+            if normalize_string(blob.name).startswith(
+                b"images/" + normalized_user_name + b"_"
+            )
         ]
         return {"user_name": user_name, "user_images": user_images}
     except Exception as e:
